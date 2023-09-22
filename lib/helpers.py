@@ -69,28 +69,88 @@ def delete_department():
 # You'll implement the employee functions in the lab
 
 def list_employees():
-    pass
+    employees = Employee.select()  # Replace 'Employee' with your actual model name
+    for employee in employees:
+        print(employee)
 
 
 def find_employee_by_name():
-    pass
+    name = input("Enter the employee's name: ")
+    try:
+        employee = Employee.get(Employee.name == name)  # Replace 'Employee' with your actual model name
+        print(employee)
+    except Employee.DoesNotExist:
+        print(f"Employee {name} not found")
 
 
 def find_employee_by_id():
-    pass
+    try:
+        employee_id = int(input("Enter the employee's id: "))
+        employee = Employee.get_by_id(employee_id)  # Replace 'Employee' with your actual model name
+        print(employee)
+    except ValueError:
+        print("Invalid input for employee id")
+    except Employee.DoesNotExist:
+        print(f"Employee {employee_id} not found")
 
 
 def create_employee():
-    pass
+    name = input("Enter the employee's name: ")
+    job_title = input("Enter the employee's job title: ")
+    department_id = input("Enter the employee's department id: ")
+
+    try:
+        employee = Employee.create(name=name, job_title=job_title, department_id=department_id)  # Replace 'Employee' with your actual model name
+        print(f"Success: {employee}")
+    except ValueError as e:
+        print(f"Error creating employee: {e}")
 
 
 def update_employee():
-    pass
+    try:
+        employee_id = int(input("Enter the employee's id: "))
+        employee = Employee.get_by_id(employee_id)  # Replace 'Employee' with your actual model name
+
+        new_name = input("Enter the employee's new name: ")
+        new_job_title = input("Enter the employee's new job title: ")
+        new_department_id = input("Enter the employee's new department id: ")
+
+        employee.name = new_name
+        employee.job_title = new_job_title
+        employee.department_id = new_department_id
+        employee.save()
+
+        print(f"Success: {employee}")
+    except ValueError:
+        print("Invalid input for employee id")
+    except Employee.DoesNotExist:
+        print(f"Employee {employee_id} not found")
+    except Exception as e:
+        print(f"Error updating employee: {e}")
 
 
 def delete_employee():
-    pass
+    try:
+        employee_id = int(input("Enter the employee's id: "))
+        employee = Employee.get_by_id(employee_id)  # Replace 'Employee' with your actual model name
+        employee.delete_instance()
+        print(f"Employee {employee_id} deleted")
+    except ValueError:
+        print("Invalid input for employee id")
+    except Employee.DoesNotExist:
+        print(f"Employee {employee_id} not found")
+    except Exception as e:
+        print(f"Error deleting employee: {e}")
 
 
 def list_department_employees():
-    pass
+    try:
+        department_id = int(input("Enter the department's id: "))
+        department = Department.get(Department.id == department_id)  # Replace 'Department' with your actual model name
+        employees = department.employees
+        for employee in employees:
+            print(employee)
+    except ValueError:
+        print("Invalid input for department id")
+    except Department.DoesNotExist:
+        print(f"Department {department_id} not found")
